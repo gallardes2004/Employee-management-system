@@ -1,17 +1,21 @@
 <?php
 include_once("connection.php");
+include_once("function.php");
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = htmlspecialchars(trim($_POST['email']));
     $password = htmlspecialchars(trim($_POST['password']));
 
     if (!empty($email) && !empty($password)) {
-        $result = $conn->query("SELECT user_id, name, password FROM Users WHERE email = '$email'");
+        $result = $conn->query("SELECT user_id, name, password, role FROM Users WHERE email = '$email'");
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if (password_verify($password, $row['password'])) {
+                $_SESSION["role"] = $row['role'];
                 $_SESSION["user_id"] = $row['user_id'];
+                logAction($conn, $_SESSION['user_id'], "Logged in");
                 header("Location: dashboard.php");
                 exit();
             } else {
