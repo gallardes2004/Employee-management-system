@@ -1,3 +1,7 @@
+<?php
+include_once("connection.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,7 +124,7 @@
             $phone = htmlspecialchars(trim($_POST['phone']));
 
             if (!empty($name) && !empty($email) && !empty($_POST['password'])) {
-                $stmt = $conn->prepare("INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)");
+                $stmt =$conn->prepare("INSERT INTO Users (name, email, password, phone) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("ssss", $name, $email, $password, $phone);
 
                 if ($stmt->execute()) {
